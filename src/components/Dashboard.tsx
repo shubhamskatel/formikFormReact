@@ -1,54 +1,51 @@
-import { useState } from "react";
+import { useReducer, useState } from "react";
+import dataDB from "../data/data";
 import MainTable from "./Table";
 import SignupForm from "./form";
 
 const Dashboard = () => {
-  const [userData, setuserData] = useState<any>([]);
-  const [singleData, setSingleData] = useState<any>();
+  const [userData, setUserData] = useState<any>();
   const [editIndex, setEditIndex] = useState<any>();
   const [editStatus, setEditStatus] = useState<boolean>(false);
 
-  // Function adds new user data to the state
-  const setData = (data: any) => {
-    setuserData([...userData, data]);
+  const dataReducer = (data: any, action: any) => {
+    switch (action.type) {
+      case "ADD":
+        return [...data, action.payload];
+
+      case "DELETE":
+        const updatedUserData = [...data];
+        updatedUserData.splice(action.payload, 1);
+        return updatedUserData;
+
+      case "GETSINGLEUSERDATA":
+        setEditStatus(true);
+        setEditIndex(action.payload);
+        setUserData(data[action.payload]);
+        return data;
+
+      case "SETSINGLEUSERDATA":
+        const tempData = data;
+        tempData[editIndex] = action.payload;
+        setEditStatus(false);
+        setUserData(null);
+        return tempData;
+
+      default:
+        return data;
+    }
   };
 
-  // Function sets single data to the state to be edited
-  const setSingleDataFunction = (newData: any) => {
-    const tempData = userData;
-    tempData[editIndex] = newData;
-    setuserData(tempData);
-    setEditStatus(false);
-    setSingleData(undefined);
-  };
-
-  // Function handles the delete button
-  const deleteButton = (index: number) => {
-    const updatedUserData = [...userData];
-    updatedUserData.splice(index, 1);
-    setuserData(updatedUserData);
-  };
-
-  // Function handles the edit button
-  const editButton = (index: number) => {
-    setSingleData(userData[index]);
-    setEditStatus(true);
-    setEditIndex(index);
-  };
+  const [totalData, dispatch] = useReducer(dataReducer, dataDB);
 
   return (
     <>
       <SignupForm
-        setData={setData}
-        setSingleDataFunction={setSingleDataFunction}
-        singleData={singleData}
+        dispatch={dispatch}
+        userData={userData}
         editStatus={editStatus}
       />
-      <MainTable
-        userData={userData}
-        deleteButton={deleteButton}
-        editButton={editButton}
-      />
+      <MainTable totalData={totalData} dispatch={dispatch} />
     </>
   );
 };

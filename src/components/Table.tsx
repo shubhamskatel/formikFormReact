@@ -1,11 +1,10 @@
-
 interface Props {
-  userData: any;
-  deleteButton: (index: any) => void;
-  editButton: (index: any) => void;
+  totalData: any;
+  dispatch: any;
 }
 
-const MainTable = ({ userData, deleteButton, editButton }: Props) => {
+const MainTable = ({ totalData, dispatch }: Props) => {
+  console.log("UserData::::::::::::::: ", totalData);
   return (
     <div>
       <table className="table table-striped">
@@ -20,7 +19,7 @@ const MainTable = ({ userData, deleteButton, editButton }: Props) => {
           </tr>
         </thead>
         <tbody>
-          {userData.map((user: any, index: any) => (
+          {totalData.map((user: any, index: any) => (
             <tr key={index}>
               <td>{user.name}</td>
               <td>{user.class}</td>
@@ -28,10 +27,20 @@ const MainTable = ({ userData, deleteButton, editButton }: Props) => {
               <td>{user.email}</td>
 
               <td>
-                <button onClick={() => editButton(index)}>Edit</button>
+                <button
+                  onClick={() =>
+                    dispatch({ type: "GETSINGLEUSERDATA", payload: index })
+                  }
+                >
+                  Edit
+                </button>
               </td>
               <td>
-                <button onClick={() => deleteButton(index)}>Delete</button>
+                <button
+                  onClick={() => dispatch({ type: "DELETE", payload: index })}
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}

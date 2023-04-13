@@ -59,24 +59,18 @@ const MySelect = ({ label, ...props }: any) => {
 };
 
 interface Props {
-  setData: any;
-  setSingleDataFunction: any;
-  singleData: any;
+  dispatch: any;
+  userData: any;
   editStatus: boolean;
 }
 
 // And now we can use these
-const SignupForm = ({
-  setData,
-  setSingleDataFunction,
-  singleData,
-  editStatus,
-}: Props) => {
+const SignupForm = ({ dispatch, userData, editStatus }: Props) => {
   const initialValues: any = {
-    name: singleData?.name ?? "",
-    class: singleData?.class ?? "",
-    gender: singleData?.gender ?? "",
-    email: singleData?.email ?? "",
+    name: userData?.name ?? "",
+    class: userData?.class ?? "",
+    gender: userData?.gender ?? "",
+    email: userData?.email ?? "",
   };
 
   // useEffect(() => {
@@ -109,9 +103,9 @@ const SignupForm = ({
               .required("Required"),
           })}
           onSubmit={(values, { resetForm }) => {
-            if (editStatus) setSingleDataFunction(values);
-            else setData(values);
-            console.log("Data:: ", values);
+            if (editStatus)
+              dispatch({ type: "SETSINGLEUSERDATA", payload: values });
+            else dispatch({ type: "ADD", payload: values });
 
             resetForm();
           }}
