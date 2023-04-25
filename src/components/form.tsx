@@ -62,11 +62,9 @@ const MySelect = ({ label, ...props }: any) => {
 
 // And now we can use these
 const SignupForm = () => {
-  const userData: any = useSelector((state: any) => state.totalData.singleData);
-  const index: number = useSelector((state: any) => state.totalData.index);
-  const editStatus: boolean = useSelector(
-    (state: any) => state.totalData.editStatus
-  );
+  const userData: any = useSelector((state: any) => state?.singleData);
+  const index: number = useSelector((state: any) => state?.index);
+  const editStatus: boolean = useSelector((state: any) => state?.editStatus);
 
   const initialValues: any = {
     name: userData?.name ?? "",
@@ -97,11 +95,11 @@ const SignupForm = () => {
               .required("Required"),
           })}
           onSubmit={(values, { resetForm }) => {
+            console.log("values::", values);
             if (editStatus)
               dispatch(setSingleUserData({ index: index, data: values }));
             else dispatch(addData(values));
 
-            
             resetForm();
           }}
         >

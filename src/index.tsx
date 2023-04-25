@@ -7,15 +7,22 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles.css";
 import "./styles-custom.css";
 import { Provider } from "react-redux";
-import { store } from "./redux/Store";
+import store from "./redux/Store";
+import persistStore from "redux-persist/es/persistStore";
+import { PersistGate } from "redux-persist/integration/react";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+
+let persistor = persistStore(store);
+
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <PersistGate persistor={persistor}>
+        <App />
+      </PersistGate>
     </Provider>
   </React.StrictMode>
 );

@@ -2,10 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteData, getSingleUserData } from "../redux/reducers/userDataSlice";
 
 const MainTable = () => {
-  const totalData = useSelector((state: any) => state.totalData.userData);
+  const totalData = useSelector((state: any) => state?.userData);
   const dispatch = useDispatch();
-
-  console.log("UserData::::::::::::::: ", totalData);
 
   return (
     <div>
@@ -21,7 +19,7 @@ const MainTable = () => {
           </tr>
         </thead>
         <tbody>
-          {totalData.map((user: any, index: any) => (
+          {totalData?.map((user: any, index: any) => (
             <tr key={index}>
               <td>{user.name}</td>
               <td>{user.class}</td>

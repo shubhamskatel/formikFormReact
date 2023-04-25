@@ -12,7 +12,7 @@ export const userDataSlice = createSlice({
   initialState,
   reducers: {
     addData: (state, action) => {
-      state.userData = [...state.userData, action.payload];
+      state.userData = [...state?.userData, action.payload];
     },
     deleteData: (state, action) => {
       const updatedUserData = [...state.userData];
