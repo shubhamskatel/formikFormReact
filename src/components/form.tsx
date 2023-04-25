@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 import { Form, Formik, useField } from "formik";
+import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
+import { addData, setSingleUserData } from "../redux/reducers/userDataSlice";
 
 const MyTextInput = ({ label, ...props }: any) => {
   // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
@@ -58,14 +60,14 @@ const MySelect = ({ label, ...props }: any) => {
   );
 };
 
-interface Props {
-  dispatch: any;
-  userData: any;
-  editStatus: boolean;
-}
-
 // And now we can use these
-const SignupForm = ({ dispatch, userData, editStatus }: Props) => {
+const SignupForm = () => {
+  const userData: any = useSelector((state: any) => state.totalData.singleData);
+  const index: number = useSelector((state: any) => state.totalData.index);
+  const editStatus: boolean = useSelector(
+    (state: any) => state.totalData.editStatus
+  );
+
   const initialValues: any = {
     name: userData?.name ?? "",
     class: userData?.class ?? "",
@@ -73,15 +75,7 @@ const SignupForm = ({ dispatch, userData, editStatus }: Props) => {
     email: userData?.email ?? "",
   };
 
-  // useEffect(() => {
-  //   if (singleData) {
-  //     singleDatasetReloadForm(true);
-  //     setInitialValues(singleData);
-  //     setTimeout(function () {
-  //       setReloadForm(false);
-  //     }, 10);
-  //   }
-  // }, [singleData]);
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -104,9 +98,10 @@ const SignupForm = ({ dispatch, userData, editStatus }: Props) => {
           })}
           onSubmit={(values, { resetForm }) => {
             if (editStatus)
-              dispatch({ type: "SETSINGLEUSERDATA", payload: values });
-            else dispatch({ type: "ADD", payload: values });
+              dispatch(setSingleUserData({ index: index, data: values }));
+            else dispatch(addData(values));
 
+            
             resetForm();
           }}
         >

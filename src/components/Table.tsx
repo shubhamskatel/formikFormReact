@@ -1,10 +1,12 @@
-interface Props {
-  totalData: any;
-  dispatch: any;
-}
+import { useDispatch, useSelector } from "react-redux";
+import { deleteData, getSingleUserData } from "../redux/reducers/userDataSlice";
 
-const MainTable = ({ totalData, dispatch }: Props) => {
+const MainTable = () => {
+  const totalData = useSelector((state: any) => state.totalData.userData);
+  const dispatch = useDispatch();
+
   console.log("UserData::::::::::::::: ", totalData);
+
   return (
     <div>
       <table className="table table-striped">
@@ -27,18 +29,12 @@ const MainTable = ({ totalData, dispatch }: Props) => {
               <td>{user.email}</td>
 
               <td>
-                <button
-                  onClick={() =>
-                    dispatch({ type: "GETSINGLEUSERDATA", payload: index })
-                  }
-                >
+                <button onClick={() => dispatch(getSingleUserData(index))}>
                   Edit
                 </button>
               </td>
               <td>
-                <button
-                  onClick={() => dispatch({ type: "DELETE", payload: index })}
-                >
+                <button onClick={() => dispatch(deleteData(index))}>
                   Delete
                 </button>
               </td>
